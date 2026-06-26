@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services | INSTYRNIS</title>
+    <link rel="shortcut icon" href="./R1.png" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@200;400;800&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: #fff;
+        color: #000;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      .mono {
+        font-family: "Space Mono", monospace;
+      }
+      .sync {
+        font-family: "Syncopate", sans-serif;
+      }
+      .tag {
+        border: 1px solid #000;
+        padding: 4px 14px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        width: fit-content;
+        letter-spacing: 0.1em;
+      }
+      .btn-solid {
+        background: #000;
+        color: #fff;
+        padding: 0.9rem 2.2rem;
+        font-weight: 800;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border: 2px solid #000;
+        transition: all 0.3s;
+        display: inline-block;
+      }
+      .btn-solid:hover {
+        background: #fff;
+        color: #000;
+      }
+      .fade {
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 0.8s var(--ease),
+          transform 0.8s var(--ease);
+      }
+      .fade.in {
+        opacity: 1;
+        transform: none;
+      }
+      .fd2 {
+        transition-delay: 0.15s !important;
+      }
+      .fd3 {
+        transition-delay: 0.3s !important;
+      }
+      .fd4 {
+        transition-delay: 0.45s !important;
+      }
+
+      .pill {
+        background: #000;
+        color: #fff;
+        padding: 3px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        margin: 3px;
+      }
+
+      /* Alternating Zig-Zag Layout */
+      .zigzag-section {
+        border-bottom: 1px solid #000;
+        overflow: hidden;
+      }
+      .zigzag-visual {
+        background: #f7f7f7;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8rem;
+        border-right: 1px solid #000;
+      }
+      .zigzag-section:nth-child(even) .zigzag-visual {
+        order: 2;
+        border-right: 0;
+        border-left: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="fixed top-0 w-full z-[100] px-6 py-4 md:px-12 md:py-6 flex justify-between items-center bg-[rgba(255,255,255,0.92)] backdrop-blur-md border-b border-black"
+    >
+      <a href="index.html" class="sync text-xl font-bold tracking-tighter"
+        >INSTYRNIS</a
+      >
+      <div
+        class="hidden md:flex mono gap-8 text-[10px] tracking-widest uppercase"
+      >
+        <a href="index.html" class="hover:line-through transition">Home</a>
+        <a href="about.html" class="hover:line-through transition">About</a>
+        <a href="services.html" class="hover:line-through transition underline"
+          >Services</a
+        >
+        <a href="careers.html" class="hover:line-through transition">Careers</a>
+        <a href="contact.html" class="hover:line-through transition">Contact</a>
+      </div>
+      <button
+        id="menu-btn"
+        class="block md:hidden mono text-[11px] font-bold tracking-widest uppercase border border-black px-3 py-1.5"
+      >
+        MENU
+      </button>
+    </nav>
+
+    <div
+      id="mobile-menu"
+      class="hidden fixed top-[58px] left-0 w-full bg-white border-b border-black z-50 flex-col p-6 gap-4 mono text-xs tracking-widest uppercase"
+    >
+      <a href="index.html" class="py-2 border-b">Home</a>
+      <a href="about.html" class="py-2 border-b">About</a>
+      <a href="services.html" class="py-2 border-b font-bold">Services</a>
+      <a href="careers.html" class="py-2 border-b">Careers</a>
+      <a href="contact.html" class="py-2">Contact</a>
+    </div>
+
+    <div
+      class="pt-32 pb-12 px-6 md:pt-40 md:pb-20 md:px-16 border-b-[8px] border-black"
+    >
+      <span class="tag inline-block fade">Capabilities</span>
+      <h1
+        class="fade fd2 sync uppercase"
+        style="
+          font-size: clamp(2.5rem, 8.5vw, 8.5rem);
+          font-weight: 800;
+          line-height: 0.85;
+          letter-spacing: -0.05em;
+          margin-top: 1.5rem;
+        "
+      >
+        THE STACK.<br />OUR TOOLS.
+      </h1>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
+        <p class="fade fd3 text-lg md:text-xl text-gray-500">
+          We don't sell hours. We sell outcomes. Our service architecture is
+          built to remove human intervention from your business critical loops.
+        </p>
+      </div>
+    </div>
+
+    <div class="zigzag-container">
+      <div class="zigzag-section grid grid-cols-1 md:grid-cols-2">
+        <div class="zigzag-visual py-20 md:py-0 fade">🤖</div>
+        <div class="p-8 md:p-20 flex flex-col justify-center">
+          <span class="tag mb-6">01 / AI AGENTS</span>
+          <h2 class="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">
+            Autonomous Employee Scaling
+          </h2>
+          <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+            Full-cycle AI agents that live in your Slack, Email, or CRM. They
+            don't just "chat"—they execute tasks, update databases, and make
+            decisions based on your logic.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-10">
+            <span class="pill">AutoGPT</span
+            ><span class="pill">Custom LLMs</span
+            ><span class="pill">Multi-Agent</span>
+          </div>
+          <a href="contact.html" class="btn-solid w-fit"
+            >Inquire for Agent Build</a
+          >
+        </div>
+      </div>
+
+      <div class="zigzag-section grid grid-cols-1 md:grid-cols-2">
+        <div class="zigzag-visual py-20 md:py-0 fade">⚡</div>
+        <div class="p-8 md:p-20 flex flex-col justify-center">
+          <span class="tag mb-6">02 / WORKFLOWS</span>
+          <h2 class="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">
+            System-Wide Interconnectivity
+          </h2>
+          <p class="text-gray-600 text-lg mb-8 leading-relaxed">
+            Bridging the gap between isolated software. We map your entire
+            business data flow and build high-speed bridges between tools like
+            HubSpot, Stripe, and AWS.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-10">
+            <span class="pill">API Integration</span
+            ><span class="pill">Data Sync</span
+            ><span class="pill">Architecture</span>
+          </div>
+          <a href="contact.html" class="btn-solid w-fit">Audit My Workflow</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="py-16 px-6 md:py-24 md:px-16 bg-black text-white text-center">
+      <h2
+        class="fade sync uppercase"
+        style="
+          font-size: clamp(2rem, 4.5vw, 4.5rem);
+          font-weight: 800;
+          line-height: 0.9;
+        "
+      >
+        READY TO<br />UNPLUG?
+      </h2>
+      <div class="fade fd3 mt-8">
+        <a href="contact.html"
+          ><button
+            class="btn-solid bg-white text-black border-white text-base py-4 px-10"
+          >
+            START A PROJECT →
+          </button></a
+        >
+      </div>
+    </div>
+
+    <script>
+      const obs = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("in");
+          }),
+        { threshold: 0.05 },
+      );
+      document.querySelectorAll(".fade").forEach((el) => obs.observe(el));
+      const menuBtn = document.getElementById("menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        menuBtn.innerText = mobileMenu.classList.contains("hidden")
+          ? "MENU"
+          : "CLOSE";
+      });
+
+      (function () {
+        "use strict";
+
+        // Disable Right Click
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Copy
+        document.addEventListener("copy", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Cut
+        document.addEventListener("cut", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Paste
+        document.addEventListener("paste", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Drag
+        document.addEventListener("dragstart", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Select
+        document.addEventListener("selectstart", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Common Shortcuts
+        document.addEventListener("keydown", function (e) {
+          // F12
+          if (e.key === "F12") {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+I
+          if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "i")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+J
+          if (e.ctrlKey && e.shiftKey && (e.key === "J" || e.key === "j")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+C
+          if (e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+U
+          if (e.ctrlKey && (e.key === "U" || e.key === "u")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+S
+          if (e.ctrlKey && (e.key === "S" || e.key === "s")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+A
+          if (e.ctrlKey && (e.key === "A" || e.key === "a")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+C
+          if (e.ctrlKey && (e.key === "C" || e.key === "c")) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // Clear Console
+        setInterval(function () {
+          console.clear();
+        }, 1000);
+
+        // Prevent iframe embedding
+        if (window.top !== window.self) {
+          window.top.location = window.self.location;
+        }
+
+        // Anti Debugger
+        setInterval(function () {
+          debugger;
+        }, 200);
+      })();
+    </script>
+  </body>
+</html>

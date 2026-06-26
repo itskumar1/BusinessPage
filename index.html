@@ -1,0 +1,2025 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INSTYRNIS | AI Automation & Digital Marketing for Business</title>
+    <link rel="shortcut icon" href="./R1.jpg" type="image/x-icon" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@200;400;800&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --black: #000000;
+        --white: #ffffff;
+        --ease-custom: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        cursor: none;
+      }
+
+      body {
+        background: var(--white);
+        color: var(--black);
+        font-family: "Plus Jakarta Sans", sans-serif;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .mono {
+        font-family: "Space Mono", monospace;
+      }
+      .sync {
+        font-family: "Syncopate", sans-serif;
+      }
+
+      /* ── PRELOADER ── */
+      #loader {
+        position: fixed;
+        inset: 0;
+        background: #000;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      .loader-bar {
+        width: 300px;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        position: relative;
+        overflow: hidden;
+        margin-top: 20px;
+      }
+      .loader-progress {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 0%;
+        background: #fff;
+      }
+
+      /* ── CURSOR ── */
+      #cursor {
+        position: fixed;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #000;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 10000;
+        transition:
+          transform 0.1s ease,
+          background 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #cursor::after {
+        content: "";
+        width: 4px;
+        height: 4px;
+        background: #000;
+        border-radius: 50%;
+      }
+
+      #canvas-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      /* ── SECTIONS ── */
+      section {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #000;
+        background: #fff;
+        overflow: hidden;
+      }
+
+      /* ── MOBILE NAV TOGGLE HARDCORE FALLBACK ── */
+      #mobile-menu-toggle:checked ~ #mobile-menu {
+        display: flex !important;
+      }
+
+      /* ── APERTURE REVEAL ── */
+      .reveal-aperture {
+        width: 100%;
+        height: 100%;
+        clip-path: polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%);
+        transform: scale(1.05) rotate(-3deg);
+        transition:
+          clip-path 1.4s var(--ease-custom),
+          transform 1.4s var(--ease-custom),
+          opacity 0.8s linear;
+        opacity: 0;
+      }
+      .reveal-aperture.active {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+
+      /* ── PER-ELEMENT ANIMATIONS ── */
+      .anim-fade-up {
+        opacity: 0;
+        transform: translateY(60px);
+        transition:
+          opacity 0.9s var(--ease-custom),
+          transform 0.9s var(--ease-custom);
+      }
+      .anim-fade-left {
+        opacity: 0;
+        transform: translateX(-60px);
+        transition:
+          opacity 0.9s var(--ease-custom),
+          transform 0.9s var(--ease-custom);
+      }
+      .anim-fade-right {
+        opacity: 0;
+        transform: translateX(60px);
+        transition:
+          opacity 0.9s var(--ease-custom),
+          transform 0.9s var(--ease-custom);
+      }
+      .anim-scale-in {
+        opacity: 0;
+        transform: scale(0.85);
+        transition:
+          opacity 0.9s var(--ease-custom),
+          transform 0.9s var(--ease-custom);
+      }
+
+      .anim-delay-1 {
+        transition-delay: 0.1s !important;
+      }
+      .anim-delay-2 {
+        transition-delay: 0.22s !important;
+      }
+      .anim-delay-3 {
+        transition-delay: 0.36s !important;
+      }
+      .anim-delay-4 {
+        transition-delay: 0.5s !important;
+      }
+      .anim-delay-5 {
+        transition-delay: 0.65s !important;
+      }
+
+      .section-visible .anim-fade-up,
+      .section-visible .anim-fade-left,
+      .section-visible .anim-fade-right,
+      .section-visible .anim-scale-in {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* ── HERO TITLE ── */
+      .hero-title {
+        font-size: clamp(2.5rem, 9vw, 16rem);
+        line-height: 0.88;
+        font-weight: 800;
+        letter-spacing: -0.06em;
+      }
+
+      /* ── BENTO ── */
+      .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        height: 100vh;
+        width: 100%;
+      }
+      .bento-cell {
+        border: 0.5px solid #000;
+        padding: 3.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* ── TAG PILL ── */
+      .tag {
+        border: 1px solid #000;
+        padding: 4px 15px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        width: fit-content;
+        letter-spacing: 0.1em;
+      }
+
+      /* ── COUNTERS ── */
+      .counter-num {
+        font-size: clamp(3rem, 7vw, 10rem);
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.04em;
+      }
+
+      /* ── PROCESS LIST ROWS ── */
+      .step-row {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 2.5rem 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition:
+          padding 0.5s var(--ease-custom),
+          background 0.4s ease,
+          color 0.4s ease;
+        cursor: pointer;
+      }
+      .step-row:hover {
+        padding-left: 2rem;
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      /* ── TESTIMONIALS ── */
+      .testi-card {
+        border: 1px solid #000;
+        padding: 3rem;
+        transition:
+          transform 0.5s var(--ease-custom),
+          box-shadow 0.5s ease;
+      }
+      .testi-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 8px 8px 0 #000;
+      }
+
+      /* ── SCROLL PROGRESS ── */
+      #progress-wrap {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        z-index: 10001;
+      }
+      #progress-bar {
+        width: 0%;
+        height: 100%;
+        background: #000;
+      }
+
+      /* ── TICKER ── */
+      .ticker-section {
+        min-height: unset !important;
+        border-bottom: 1px solid #000;
+      }
+      .ticker-wrap {
+        overflow: hidden;
+        background: #000;
+        color: #fff;
+      }
+      .ticker-inner {
+        display: flex;
+        width: max-content;
+        animation: ticker 24s linear infinite;
+      }
+      .ticker-inner span {
+        white-space: nowrap;
+        padding: 0.9rem 4rem;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        font-family: "Space Mono", monospace;
+      }
+      @keyframes ticker {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* ── PRICING ── */
+      .price-card {
+        border: 1px solid #000;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        transition:
+          background 0.4s ease,
+          color 0.4s ease,
+          transform 0.4s var(--ease-custom);
+      }
+      .price-card:hover {
+        transform: scale(1.03);
+      }
+      .price-card.featured {
+        background: #000;
+        color: #fff;
+      }
+      .price-card:not(.featured):hover {
+        background: #f5f5f5;
+      }
+      .ptag {
+        border: 1px solid currentColor;
+        padding: 3px 12px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        width: fit-content;
+        opacity: 0.6;
+      }
+
+      /* ── FAQ ── */
+      .faq-item {
+        border-bottom: 1px solid #000;
+      }
+      .faq-q {
+        width: 100%;
+        text-align: left;
+        padding: 2rem 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        transition: color 0.3s ease;
+      }
+      .faq-q:hover {
+        color: #555;
+      }
+      .faq-a {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.6s var(--ease-custom),
+          padding 0.4s ease;
+        color: #666;
+        line-height: 1.85;
+        font-size: 1rem;
+      }
+      .faq-item.open .faq-a {
+        max-height: 300px;
+        padding-bottom: 2rem;
+      }
+      .faq-icon {
+        font-size: 1.5rem;
+        transition: transform 0.4s var(--ease-custom);
+        flex-shrink: 0;
+        margin-left: 1rem;
+      }
+      .faq-item.open .faq-icon {
+        transform: rotate(45deg);
+      }
+
+      /* ── BUTTONS ── */
+      .btn-solid {
+        background: #000;
+        color: #fff;
+        padding: 1.1rem 2.5rem;
+        font-weight: 800;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border: 2px solid #000;
+        transition:
+          background 0.3s ease,
+          color 0.3s ease,
+          transform 0.3s ease;
+        display: inline-block;
+      }
+      .btn-solid:hover {
+        background: #fff;
+        color: #000;
+        transform: scale(1.04);
+      }
+      .btn-outline {
+        background: transparent;
+        color: #000;
+        padding: 1.1rem 2.5rem;
+        font-weight: 800;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border: 2px solid #000;
+        transition:
+          background 0.3s ease,
+          color 0.3s ease;
+        display: inline-block;
+      }
+      .btn-outline:hover {
+        background: #000;
+        color: #fff;
+      }
+
+      /* ── MOBILE ── */
+      @media (max-width: 768px) {
+        #cursor {
+          display: none !important;
+        }
+        * {
+          cursor: auto !important;
+        }
+        .hero-title {
+          font-size: clamp(2.2rem, 11vw, 5.5rem);
+        }
+        .bento-grid {
+          display: flex;
+          flex-direction: column;
+          height: auto;
+        }
+        .bento-cell {
+          padding: 2.5rem;
+        }
+        .step-row {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="progress-wrap"><div id="progress-bar"></div></div>
+    <div id="cursor"></div>
+
+    <div id="loader">
+      <div
+        class="sync text-white text-2xl sm:text-4xl tracking-[1em] sm:tracking-[2em] translate-x-[0.5em] sm:translate-x-[1em] text-center px-4"
+      >
+        INSTYRNIS
+      </div>
+      <div class="loader-bar"><div class="loader-progress"></div></div>
+      <div class="mono text-white/20 text-[10px] mt-8" id="load-msg">
+        ANALYZING YOUR WORKFLOW...
+      </div>
+    </div>
+
+    <canvas id="canvas-bg"></canvas>
+
+    <nav
+      class="fixed top-0 w-full z-[100] p-6 md:p-8 flex justify-between items-center mix-blend-difference text-white"
+    >
+      <div class="sync text-xl font-bold tracking-tighter">
+        <a href="index.html">INSTYRNIS</a>
+      </div>
+      <input type="checkbox" id="mobile-menu-toggle" class="hidden" />
+      <label
+        for="mobile-menu-toggle"
+        class="md:hidden block cursor-pointer z-[102] text-white mono text-xs tracking-widest uppercase selection:bg-transparent"
+        >Menu</label
+      >
+
+      <div
+        class="hidden md:flex space-x-8 mono text-[10px] tracking-widest uppercase"
+      >
+        <a href="#solutions" class="hover:line-through transition">Solutions</a>
+        <a href="#process" class="hover:line-through transition"
+          >How It Works</a
+        >
+        <a href="Services.html" class="hover:line-through transition"
+          >Services</a
+        >
+        <a href="About Us.html" class="hover:line-through transition">About</a>
+        <a href="Careers.html" class="hover:line-through transition">Careers</a>
+        <a href="Contact.html" class="hover:line-through transition underline"
+          >Contact</a
+        >
+      </div>
+
+      <div
+        id="mobile-menu"
+        class="hidden fixed inset-0 bg-black/95 z-[101] flex-col items-center justify-center space-y-6 mono text-xs tracking-widest uppercase"
+      >
+        <a
+          href="#solutions"
+          onclick="
+            document.getElementById('mobile-menu-toggle').checked = false
+          "
+          class="hover:line-through transition text-white"
+          >Solutions</a
+        >
+        <a
+          href="#process"
+          onclick="
+            document.getElementById('mobile-menu-toggle').checked = false
+          "
+          class="hover:line-through transition text-white"
+          >How It Works</a
+        >
+        <a href="services.html" class="hover:line-through transition text-white"
+          >Services</a
+        >
+        <a href="about.html" class="hover:line-through transition text-white"
+          >About</a
+        >
+        <a href="careers.html" class="hover:line-through transition text-white"
+          >Careers</a
+        >
+        <a
+          href="contact.html"
+          class="hover:line-through transition text-white underline"
+          >Contact</a
+        >
+      </div>
+    </nav>
+
+    <main>
+      <section id="hero">
+        <div
+          class="reveal-aperture p-6 md:p-10 flex flex-col justify-end w-full"
+          style="min-height: 100vh; padding-bottom: 4rem; padding-top: 6rem"
+        >
+          <div
+            class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-6"
+          >
+            <h1 class="hero-title anim-fade-up">
+              YOUR BUSINESS<br />ON AUTOPILOT.
+            </h1>
+            <div
+              class="mono text-xs text-left md:text-right anim-fade-right anim-delay-2 opacity-60"
+            >
+              [EST. 2026]<br />
+              TASKS AUTOMATED DAILY: 2.4M+<br />
+              AVG. TIME SAVED: 18 HRS/WEEK<br />
+              CLIENT ROI: 340%
+            </div>
+          </div>
+          <div
+            class="grid grid-cols-1 lg:grid-cols-12 gap-8 border-t-[4px] md:border-t-[8px] border-black pt-10"
+          >
+            <div
+              class="lg:col-span-4 text-2xl md:text-3xl font-black leading-tight anim-fade-up anim-delay-2"
+            >
+              AI AUTOMATION & DIGITAL MARKETING THAT WORK WHILE YOU SLEEP.
+            </div>
+            <div
+              class="lg:col-span-5 text-base md:text-lg font-light text-zinc-500 anim-fade-up anim-delay-3"
+            >
+              We replace repetitive, time-consuming tasks with smart AI
+              workflows and pair them with marketing that actually brings in
+              customers — so your team focuses on what actually grows your
+              business. No technical knowledge needed. Up and running in days.
+            </div>
+            <div
+              class="lg:col-span-3 flex flex-col justify-end gap-4 anim-fade-up anim-delay-4"
+            >
+              <button class="btn-solid text-xl p-6 w-full">
+                GET STARTED FREE
+              </button>
+              <span class="mono text-[10px] opacity-30 text-center"
+                >No credit card required</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ticker-section"
+        style="
+          min-height: unset;
+          display: block;
+          border-bottom: 1px solid #000;
+          background: #000;
+        "
+      >
+        <div class="ticker-wrap">
+          <div class="ticker-inner">
+            <span>✦ Customer Support Automation</span>
+            <span>✦ Invoice Processing</span>
+            <span>✦ SEO & Content Marketing</span>
+            <span>✦ Lead Scoring</span>
+            <span>✦ Social Media Management</span>
+            <span>✦ Report Generation</span>
+            <span>✦ Paid Ads & PPC</span>
+            <span>✦ Inventory Management</span>
+            <span>✦ Customer Support Automation</span>
+            <span>✦ Invoice Processing</span>
+            <span>✦ SEO & Content Marketing</span>
+            <span>✦ Lead Scoring</span>
+            <span>✦ Social Media Management</span>
+            <span>✦ Report Generation</span>
+            <span>✦ Paid Ads & PPC</span>
+            <span>✦ Inventory Management</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="reveal-aperture p-6 md:p-16 w-full">
+          <div class="anim-fade-up mb-12">
+            <span class="tag">The Impact</span>
+            <h2 class="text-4xl md:text-6xl font-black mt-6 leading-none">
+              Numbers<br />don't lie.
+            </h2>
+          </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-black"
+          >
+            <div
+              class="border-b sm:border-b-0 border-r border-black p-6 md:p-12 anim-scale-in anim-delay-1"
+            >
+              <div class="counter-num" data-target="18">0</div>
+              <div class="text-xl md:text-2xl font-black mb-2">hrs/week</div>
+              <div
+                class="text-xs md:text-sm text-zinc-500 mt-3 leading-relaxed"
+              >
+                saved per employee on average through automated workflows
+              </div>
+            </div>
+            <div
+              class="border-b sm:border-b-0 md:border-r border-black p-6 md:p-12 anim-scale-in anim-delay-2"
+            >
+              <div class="counter-num" data-target="340">0</div>
+              <div class="text-xl md:text-2xl font-black mb-2">% ROI</div>
+              <div
+                class="text-xs md:text-sm text-zinc-500 mt-3 leading-relaxed"
+              >
+                return on investment reported by clients within 90 days
+              </div>
+            </div>
+            <div
+              class="border-b sm:border-b-0 border-r border-black p-6 md:p-12 anim-scale-in anim-delay-3"
+            >
+              <div class="counter-num" data-target="94">0</div>
+              <div class="text-xl md:text-2xl font-black mb-2">% accuracy</div>
+              <div
+                class="text-xs md:text-sm text-zinc-500 mt-3 leading-relaxed"
+              >
+                on automated data processing — better than manual entry
+              </div>
+            </div>
+            <div class="p-6 md:p-12 anim-scale-in anim-delay-4">
+              <div class="counter-num" data-target="3">0</div>
+              <div class="text-xl md:text-2xl font-black mb-2">day setup</div>
+              <div
+                class="text-xs md:text-sm text-zinc-500 mt-3 leading-relaxed"
+              >
+                from first call to your first automation or campaign running
+                live
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about-us">
+        <div class="reveal-aperture p-6 md:p-16 w-full">
+          <div class="anim-fade-up mb-12">
+            <span class="tag">Who We Are</span>
+            <h2 class="text-4xl md:text-6xl font-black mt-6 leading-none">
+              Engineered for<br />efficiency.
+            </h2>
+          </div>
+          <div
+            class="grid grid-cols-1 lg:grid-cols-12 gap-8 border-t border-black pt-12 items-center"
+          >
+            <div
+              class="lg:col-span-4 flex justify-center lg:justify-start anim-scale-in anim-delay-1 mb-6 lg:mb-0"
+            >
+              <div
+                class="w-48 h-48 md:w-56 md:h-56 rounded-full border border-black p-2 flex items-center justify-center bg-zinc-50 overflow-hidden"
+              >
+                <img
+                  src="./R2.jpg"
+                  alt="INSTYRNIS Logo"
+                  class="w-full h-full object-cover rounded-full opacity-80"
+                  onerror="
+                    this.style.display = 'none';
+                    this.parentElement.innerHTML =
+                      '<span class=\'sync text-sm font-bold tracking-widest\'>LOGO</span>';
+                  "
+                />
+              </div>
+            </div>
+            <div
+              class="lg:col-span-8 flex flex-col gap-6 anim-fade-right anim-delay-2"
+            >
+              <p
+                class="text-xl md:text-2xl font-black leading-tight text-black"
+              >
+                WE ARE TECHNOLOGISTS, MARKETERS, AND PROBLEM SOLVERS.
+              </p>
+              <p
+                class="text-base md:text-lg font-light text-zinc-500 leading-relaxed"
+              >
+                At INSTYRNIS, we sit at the intersection of human creativity,
+                automated scale, and marketing that actually converts. Our
+                mission is to eliminate structural friction inside modern
+                enterprises by deploying autonomous workflows that act
+                flawlessly, while building the digital marketing engine that
+                keeps new customers coming in.
+              </p>
+              <p
+                class="text-base md:text-lg font-light text-zinc-500 leading-relaxed"
+              >
+                We believe that human teams shouldn't spend their lives
+                copy-pasting values, fighting operational bottlenecks, or
+                guessing at what their marketing is doing. Through custom
+                integrations, advanced agent orchestration, and data-driven
+                campaigns, we build digital infrastructure that scales
+                seamlessly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="solutions" class="bg-black text-white">
+        <div class="reveal-aperture p-6 md:p-16 w-full">
+          <div class="flex justify-between items-end mb-16 flex-wrap gap-8">
+            <div>
+              <span class="tag border-white/30 text-white/60 anim-fade-up"
+                >Solutions</span
+              >
+              <h2
+                class="text-5xl md:text-7xl font-black mt-6 italic leading-none anim-fade-up anim-delay-1"
+              >
+                What we<br />automate & grow.
+              </h2>
+            </div>
+            <p
+              class="max-w-sm text-zinc-400 text-base md:text-lg anim-fade-right anim-delay-2"
+            >
+              Every repetitive task — and every channel that should be bringing
+              you customers — is a candidate. Here's where we start.
+            </p>
+          </div>
+          <div class="space-y-0">
+            <div class="step-row anim-fade-up anim-delay-1">
+              <span class="mono text-zinc-600 text-xl w-12 flex-shrink-0"
+                >01</span
+              >
+              <h3 class="text-2xl md:text-4xl font-bold flex-1 md:px-8">
+                Customer Support
+              </h3>
+              <p class="max-w-xs text-zinc-400 text-sm hidden md:block">
+                Answer customer questions 24/7 with an AI that knows your
+                products, policies, and brand voice.
+              </p>
+            </div>
+            <div class="step-row anim-fade-up anim-delay-2">
+              <span class="mono text-zinc-600 text-xl w-12 flex-shrink-0"
+                >02</span
+              >
+              <h3 class="text-2xl md:text-4xl font-bold flex-1 md:px-8">
+                Sales & Lead Handling
+              </h3>
+              <p class="max-w-xs text-zinc-400 text-sm hidden md:block">
+                Qualify leads, send follow-ups, and book meetings automatically
+                — while your team sleeps.
+              </p>
+            </div>
+            <div class="step-row anim-fade-up anim-delay-3">
+              <span class="mono text-zinc-600 text-xl w-12 flex-shrink-0"
+                >03</span
+              >
+              <h3 class="text-2xl md:text-4xl font-bold flex-1 md:px-8">
+                SEO, Social & Paid Ads
+              </h3>
+              <p class="max-w-xs text-zinc-400 text-sm hidden md:block">
+                Get found on Google, stay visible on social, and turn ad spend
+                into a predictable stream of leads.
+              </p>
+            </div>
+            <div class="step-row anim-fade-up anim-delay-4">
+              <span class="mono text-zinc-600 text-xl w-12 flex-shrink-0"
+                >04</span
+              >
+              <h3 class="text-2xl md:text-4xl font-bold flex-1 md:px-8">
+                Finance & Invoicing
+              </h3>
+              <p class="max-w-xs text-zinc-400 text-sm hidden md:block">
+                Auto-generate invoices, reconcile payments, and flag anomalies
+                before they become problems.
+              </p>
+            </div>
+            <div class="step-row anim-fade-up anim-delay-5">
+              <span class="mono text-zinc-600 text-xl w-12 flex-shrink-0"
+                >05</span
+              >
+              <h3 class="text-2xl md:text-4xl font-bold flex-1 md:px-8">
+                Reports & Analytics
+              </h3>
+              <p class="max-w-xs text-zinc-400 text-sm hidden md:block">
+                Weekly performance and campaign reports written and delivered to
+                your inbox — no analyst required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="h-auto md:h-screen">
+        <div class="reveal-aperture bento-grid">
+          <div class="bento-cell col-span-12 lg:col-span-7 lg:row-span-2">
+            <span class="tag anim-fade-up">Core Platform</span>
+            <div>
+              <h2
+                class="text-4xl md:text-6xl lg:text-8xl font-extrabold leading-none tracking-tighter anim-fade-up anim-delay-1 mt-6 lg:mt-0"
+              >
+                ONE<br />PLATFORM.<br />EVERY TASK.
+              </h2>
+              <p
+                class="text-lg md:text-xl mt-8 max-w-xl text-zinc-500 anim-fade-up anim-delay-2"
+              >
+                Connect your existing tools — Slack, email, CRM, ad accounts,
+                social channels — and let INSTYRNIS orchestrate the automation
+                and marketing work between them. No migration. No disruption. No
+                IT team needed.
+              </p>
+            </div>
+          </div>
+          <div
+            class="bento-cell col-span-12 lg:col-span-5 bg-zinc-50 anim-fade-right anim-delay-1"
+          >
+            <div>
+              <h3 class="text-xl font-bold">Works with your tools</h3>
+              <p class="mono text-sm opacity-50 mt-4">
+                Connects to 200+ apps out of the box.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mt-6">
+              <span class="tag">Gmail</span><span class="tag">Slack</span
+              ><span class="tag">Salesforce</span
+              ><span class="tag">Shopify</span><span class="tag">HubSpot</span
+              ><span class="tag">Google Ads</span
+              ><span class="tag">Meta Ads</span
+              ><span class="tag">QuickBooks</span>
+            </div>
+          </div>
+          <div
+            class="bento-cell col-span-12 lg:col-span-5 border-t lg:border-t-0 anim-fade-right anim-delay-2"
+          >
+            <div
+              class="flex flex-col sm:flex-row justify-between items-start sm:items-end h-full gap-4"
+            >
+              <div class="text-5xl md:text-6xl font-black">NO<br />CODE.</div>
+              <div class="mono text-xs text-left sm:text-right opacity-50">
+                Set up in plain English<br />Zero technical skills needed
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="problem-finder">
+        <div
+          class="reveal-aperture p-6 md:p-16 w-full"
+          style="min-height: 100vh; padding-top: 6rem; padding-bottom: 6rem"
+        >
+          <div class="anim-fade-up mb-14">
+            <span class="tag">Find Your Problem</span>
+            <h2 class="text-4xl md:text-6xl font-black mt-6 leading-none">
+              Which one<br />sounds like you?
+            </h2>
+            <p class="text-zinc-500 mt-4 max-w-lg text-base md:text-lg">
+              Pick the challenge that hits closest to home. We'll show you
+              exactly what we build to fix it.
+            </p>
+          </div>
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 border border-black"
+            id="problem-grid"
+          >
+            <div
+              class="problem-card border-r border-b border-black p-6 md:p-10 cursor-pointer group transition-all duration-500 hover:bg-black hover:text-white anim-fade-up anim-delay-1"
+            >
+              <div
+                class="text-4xl md:text-5xl mb-6 group-hover:scale-110 transition-transform duration-300"
+              >
+                📧
+              </div>
+              <h3 class="text-xl md:text-2xl font-black mb-3">
+                "I spend hours answering the same emails every day."
+              </h3>
+              <p
+                class="text-sm text-zinc-500 group-hover:text-zinc-300 leading-relaxed"
+              >
+                Your inbox is a full-time job — and it's pulling you away from
+                actual work.
+              </p>
+              <div
+                class="mt-8 pt-6 border-t border-black group-hover:border-white/20 flex justify-between items-center"
+              >
+                <span class="mono text-xs opacity-50">EMAIL AUTOMATION</span>
+                <span
+                  class="text-xl group-hover:translate-x-2 transition-transform duration-300"
+                  >→</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="problem-card border-r border-b border-black p-6 md:p-10 cursor-pointer group transition-all duration-500 hover:bg-black hover:text-white anim-fade-up anim-delay-2"
+            >
+              <div
+                class="text-4xl md:text-5xl mb-6 group-hover:scale-110 transition-transform duration-300"
+              >
+                📊
+              </div>
+              <h3 class="text-xl md:text-2xl font-black mb-3">
+                "We copy data between spreadsheets and systems all day."
+              </h3>
+              <p
+                class="text-sm text-zinc-500 group-hover:text-zinc-300 leading-relaxed"
+              >
+                Manual data entry is slow, error-prone, and a waste of your
+                team's talent.
+              </p>
+              <div
+                class="mt-8 pt-6 border-t border-black group-hover:border-white/20 flex justify-between items-center"
+              >
+                <span class="mono text-xs opacity-50">DATA SYNC</span>
+                <span
+                  class="text-xl group-hover:translate-x-2 transition-transform duration-300"
+                  >→</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="problem-card border-b border-black p-6 md:p-10 cursor-pointer group transition-all duration-500 hover:bg-black hover:text-white anim-fade-up anim-delay-3"
+            >
+              <div
+                class="text-4xl md:text-5xl mb-6 group-hover:scale-110 transition-transform duration-300"
+              >
+                🛒
+              </div>
+              <h3 class="text-xl md:text-2xl font-black mb-3">
+                "Our sales follow-up is inconsistent — leads go cold."
+              </h3>
+              <p
+                class="text-sm text-zinc-500 group-hover:text-zinc-300 leading-relaxed"
+              >
+                Great leads are falling through the cracks because nobody
+                follows up fast enough.
+              </p>
+              <div
+                class="mt-8 pt-6 border-t border-black group-hover:border-white/20 flex justify-between items-center"
+              >
+                <span class="mono text-xs opacity-50">SALES AUTOMATION</span>
+                <span
+                  class="text-xl group-hover:translate-x-2 transition-transform duration-300"
+                  >→</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="problem-card border-r border-b md:border-b-0 border-black p-6 md:p-10 cursor-pointer group transition-all duration-500 hover:bg-black hover:text-white anim-fade-up anim-delay-2"
+            >
+              <div
+                class="text-4xl md:text-5xl mb-6 group-hover:scale-110 transition-transform duration-300"
+              >
+                🧾
+              </div>
+              <h3 class="text-xl md:text-2xl font-black mb-3">
+                "Invoicing, payments, and reconciliation eat our week."
+              </h3>
+              <p
+                class="text-sm text-zinc-500 group-hover:text-zinc-300 leading-relaxed"
+              >
+                Your finance team is buried in paperwork that could run itself.
+              </p>
+              <div
+                class="mt-8 pt-6 border-t border-black group-hover:border-white/20 flex justify-between items-center"
+              >
+                <span class="mono text-xs opacity-50">FINANCE AUTOMATION</span>
+                <span
+                  class="text-xl group-hover:translate-x-2 transition-transform duration-300"
+                  >→</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="problem-card border-r border-black p-6 md:p-10 cursor-pointer group transition-all duration-500 hover:bg-black hover:text-white anim-fade-up anim-delay-3"
+            >
+              <div
+                class="text-4xl md:text-5xl mb-6 group-hover:scale-110 transition-transform duration-300"
+              >
+                🔍
+              </div>
+              <h3 class="text-xl md:text-2xl font-black mb-3">
+                "We don't show up when people search for what we do."
+              </h3>
+              <p
+                class="text-sm text-zinc-500 group-hover:text-zinc-300 leading-relaxed"
+              >
+                Your competitors rank above you on Google and social — and
+                that's where the customers are.
+              </p>
+              <div
+                class="mt-8 pt-6 border-t border-black group-hover:border-white/20 flex justify-between items-center"
+              >
+                <span class="mono text-xs opacity-50">SEO & VISIBILITY</span>
+                <span
+                  class="text-xl group-hover:translate-x-2 transition-transform duration-300"
+                  >→</span
+                >
+              </div>
+            </div>
+
+            <div
+              class="problem-card p-6 md:p-10 cursor-pointer group transition-all duration-500 hover:bg-black hover:text-white anim-fade-up anim-delay-4"
+            >
+              <div
+                class="text-4xl md:text-5xl mb-6 group-hover:scale-110 transition-transform duration-300"
+              >
+                📉
+              </div>
+              <h3 class="text-xl md:text-2xl font-black mb-3">
+                "We spend on ads but don't know what's actually working."
+              </h3>
+              <p
+                class="text-sm text-zinc-500 group-hover:text-zinc-300 leading-relaxed"
+              >
+                Decisions are based on guesswork — you need a live dashboard
+                that ties spend to results.
+              </p>
+              <div
+                class="mt-8 pt-6 border-t border-black group-hover:border-white/20 flex justify-between items-center"
+              >
+                <span class="mono text-xs opacity-50">MARKETING ANALYTICS</span>
+                <span
+                  class="text-xl group-hover:translate-x-2 transition-transform duration-300"
+                  >→</span
+                >
+              </div>
+            </div>
+          </div>
+          <div
+            class="mt-12 p-6 md:p-8 border border-dashed border-black flex justify-between items-center flex-wrap gap-6 anim-fade-up anim-delay-5"
+          >
+            <div>
+              <p class="font-black text-xl">Don't see your problem listed?</p>
+              <p class="text-zinc-500 mt-1">
+                Every business is different. Tell us what's slowing you down and
+                we'll design a solution around it.
+              </p>
+            </div>
+            <a href="contact.html"
+              ><button class="btn-solid px-10 py-5">
+                DESCRIBE YOUR PROBLEM →
+              </button></a
+            >
+          </div>
+        </div>
+      </section>
+      <section id="process">
+        <div
+          class="reveal-aperture p-6 md:p-16 w-full flex flex-col justify-center"
+          style="min-height: 100vh; padding-top: 6rem"
+        >
+          <div class="anim-fade-up mb-16">
+            <span class="tag">The Process</span>
+            <h2 class="text-4xl md:text-6xl font-black mt-6 leading-none">
+              Up and running<br />in 3 steps.
+            </h2>
+          </div>
+          <div
+            class="grid grid-cols-1 lg:grid-cols-3 gap-0 border-t border-black"
+          >
+            <div
+              class="border-b lg:border-b-0 lg:border-r border-black p-6 md:p-12 anim-fade-up anim-delay-1"
+            >
+              <div class="text-6xl md:text-8xl font-black opacity-10 mb-6">
+                01
+              </div>
+              <h3 class="text-2xl md:text-3xl font-black mb-4">
+                Tell us what's slowing you down
+              </h3>
+              <p class="text-zinc-500 text-sm md:text-base leading-relaxed">
+                Book a free 30-minute call. We map out the exact tasks eating
+                your team's time and the marketing channels that aren't pulling
+                their weight — customer emails, data entry, approvals, SEO, ads,
+                reporting.
+              </p>
+              <div class="border-t border-black mt-8 pt-6">
+                <span class="mono text-xs opacity-40">WEEK 1</span>
+              </div>
+            </div>
+            <div
+              class="border-b lg:border-b-0 lg:border-r border-black p-6 md:p-12 anim-fade-up anim-delay-2"
+            >
+              <div class="text-6xl md:text-8xl font-black opacity-10 mb-6">
+                02
+              </div>
+              <h3 class="text-2xl md:text-3xl font-black mb-4">
+                We build your workflows & campaigns
+              </h3>
+              <p class="text-zinc-500 text-sm md:text-base leading-relaxed">
+                Our team configures AI agents and marketing campaigns tailored
+                to your business. We connect your tools, test every flow, and
+                make sure everything runs the way you expect.
+              </p>
+              <div class="border-t border-black mt-8 pt-6">
+                <span class="mono text-xs opacity-40">WEEK 2–3</span>
+              </div>
+            </div>
+            <div class="p-6 md:p-12 anim-fade-up anim-delay-3">
+              <div class="text-6xl md:text-8xl font-black opacity-10 mb-6">
+                03
+              </div>
+              <h3 class="text-2xl md:text-3xl font-black mb-4">
+                Watch the hours — and leads — come in
+              </h3>
+              <p class="text-zinc-500 text-sm md:text-base leading-relaxed">
+                Go live and see results from day one. Our dashboard shows hours
+                saved, leads generated, and where to automate or advertise next
+                — in real time.
+              </p>
+              <div class="border-t border-black mt-8 pt-6">
+                <span class="mono text-xs opacity-40">WEEK 4+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-zinc-100">
+        <div class="reveal-aperture p-4 md:p-16 w-full">
+          <div
+            class="bg-black text-white p-6 md:p-16 rounded-[24px] md:rounded-[40px] min-h-[65vh] flex flex-col justify-between gap-8"
+          >
+            <div class="flex justify-between items-start flex-wrap gap-6">
+              <div>
+                <span class="tag border-white/20 text-white/50 anim-fade-up"
+                  >AI Agents</span
+                >
+                <h2
+                  class="text-4xl md:text-7xl font-black tracking-tighter mt-4 leading-none anim-fade-up anim-delay-1"
+                >
+                  YOUR 24/7<br />DIGITAL TEAM.
+                </h2>
+              </div>
+              <div class="mono text-green-400 animate-pulse text-sm">
+                ● AGENTS RUNNING
+              </div>
+            </div>
+            <div
+              class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-end"
+            >
+              <p
+                class="text-lg md:text-xl text-zinc-400 anim-fade-left anim-delay-2 leading-relaxed"
+              >
+                AI agents are like tireless digital employees. They read emails,
+                extract data, make decisions, update records, schedule
+                campaigns, and send responses — all without any human input.
+                Available every hour of every day, at a fraction of the cost.
+              </p>
+              <div
+                class="bg-white/5 p-6 md:p-8 border border-white/10 mono text-[11px] md:text-[12px] text-green-400 anim-fade-right anim-delay-3 w-full overflow-x-auto whitespace-nowrap lg:whitespace-normal"
+              >
+                <div>&gt; New order received from John Smith</div>
+                <div class="mt-1">&gt; Invoice #4821 generated... [DONE]</div>
+                <div class="mt-1">&gt; Inventory updated... [DONE]</div>
+                <div class="mt-1">&gt; Retargeting ad triggered... [DONE]</div>
+                <div class="mt-1">&gt; Confirmation email sent... [DONE]</div>
+                <div class="mt-1">&gt; Warehouse notified... [DONE]</div>
+                <div class="mt-3 text-white/30">
+                  // All tasks completed in 0.8 seconds
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div
+          class="reveal-aperture flex flex-col lg:flex-row w-full h-full"
+          style="min-height: 100vh"
+        >
+          <div
+            class="w-full lg:w-1/2 p-6 md:p-16 lg:border-r border-b lg:border-b-0 border-black flex flex-col justify-between gap-8 pt-24 lg:pt-16"
+          >
+            <div>
+              <span class="tag anim-fade-up">Industry Use Cases</span>
+              <h2
+                class="text-4xl md:text-6xl lg:text-[7vw] font-black leading-none mt-6 anim-fade-up anim-delay-1"
+              >
+                BUILT<br />FOR YOUR<br />INDUSTRY.
+              </h2>
+            </div>
+            <p
+              class="text-lg md:text-xl text-zinc-500 anim-fade-up anim-delay-2 leading-relaxed"
+            >
+              Whether you run an e-commerce store, a law firm, a medical clinic,
+              or a SaaS company — we have pre-built automation and marketing
+              templates that fit your exact workflow.
+            </p>
+          </div>
+          <div class="w-full lg:w-1/2 grid grid-cols-1 divide-y divide-black">
+            <div
+              class="p-6 md:p-12 hover:bg-zinc-50 transition anim-fade-right anim-delay-1"
+            >
+              <h4 class="text-xl md:text-2xl font-bold mb-3">E-Commerce</h4>
+              <p class="text-zinc-500 text-sm leading-relaxed">
+                Auto-handle returns, re-order stock triggers, post-purchase
+                email sequences, review requests, and retargeting ads that bring
+                shoppers back.
+              </p>
+            </div>
+            <div
+              class="p-6 md:p-12 hover:bg-zinc-50 transition anim-fade-right anim-delay-2"
+            >
+              <h4 class="text-xl md:text-2xl font-bold mb-3">
+                Professional Services
+              </h4>
+              <p class="text-zinc-500 text-sm leading-relaxed">
+                Appointment scheduling, client intake forms, billing reminders,
+                document generation, and local SEO that keeps new enquiries
+                coming in.
+              </p>
+            </div>
+            <div
+              class="p-6 md:p-12 hover:bg-zinc-50 transition anim-fade-right anim-delay-3"
+            >
+              <h4 class="text-xl md:text-2xl font-bold mb-3">Healthcare</h4>
+              <p class="text-zinc-500 text-sm leading-relaxed">
+                Patient reminders, insurance follow-ups, staff scheduling,
+                report distribution, and a website that ranks when patients
+                search for care.
+              </p>
+            </div>
+            <div
+              class="p-6 md:p-12 hover:bg-zinc-50 transition anim-fade-right anim-delay-4"
+            >
+              <h4 class="text-xl md:text-2xl font-bold mb-3">SaaS & Tech</h4>
+              <p class="text-zinc-500 text-sm leading-relaxed">
+                Churn detection, usage-based alerts, onboarding drips, customer
+                health scoring, and content marketing that fills the top of your
+                funnel.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="bg-zinc-100">
+        <div class="reveal-aperture p-6 md:p-16 w-full">
+          <div class="anim-fade-up mb-16">
+            <span class="tag">Pricing</span>
+            <h2 class="text-4xl md:text-6xl font-black mt-6 leading-none">
+              Simple, honest<br />pricing.
+            </h2>
+            <p class="text-zinc-500 mt-4 max-w-md text-sm md:text-base">
+              No hidden fees. No surprise bills. Cancel anytime. Pick the plan
+              that matches where your business is today.
+            </p>
+          </div>
+          <div
+            class="grid grid-cols-1 lg:grid-cols-3 gap-0 border border-black"
+          >
+            <div
+              class="price-card border-b lg:border-b-0 lg:border-r border-black anim-fade-up anim-delay-1"
+            >
+              <span class="ptag">Starter</span>
+              <div class="text-4xl md:text-5xl font-black mt-2">
+                $299<span class="text-xl font-normal opacity-50">/mo</span>
+              </div>
+              <p class="text-zinc-500 text-sm">
+                Perfect for small teams ready to automate their first workflows
+                and get their marketing off the ground.
+              </p>
+              <ul class="space-y-3 text-sm mt-2 mb-6">
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Up to 5 automation workflows
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> 10,000 tasks/month
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Basic SEO audit & setup
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Email & chat support
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> 50+ app integrations
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Dedicated marketing
+                  strategist
+                </li>
+              </ul>
+              <a href="contact.html">
+                <button class="btn-outline w-full mt-auto">
+                  Get Started
+                </button></a
+              >
+            </div>
+            <div
+              class="price-card featured border-b lg:border-b-0 lg:border-r border-black anim-scale-in anim-delay-2"
+            >
+              <span class="ptag">Growth · Most Popular</span>
+              <div class="text-4xl md:text-5xl font-black mt-2">
+                $899<span class="text-xl font-normal opacity-50">/mo</span>
+              </div>
+              <p class="text-zinc-400 text-sm">
+                For growing businesses that need more power, custom flows, and
+                marketing that scales with them.
+              </p>
+              <ul class="space-y-3 text-sm text-zinc-300 mt-2 mb-6">
+                <li class="flex gap-3">
+                  <span class="font-bold text-white">✓</span> Unlimited
+                  automation workflows
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold text-white">✓</span> 100,000
+                  tasks/month
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold text-white">✓</span> Social media &
+                  content calendar
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold text-white">✓</span> Paid ad campaign
+                  management
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold text-white">✓</span> Dedicated success
+                  manager
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold text-white">✓</span> Custom AI agent
+                  builds
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold text-white">✓</span> Priority 2-hr
+                  support SLA
+                </li>
+              </ul>
+              <a href="contact.html">
+                <button
+                  class="btn-solid w-full mt-auto"
+                  style="background: #fff; color: #000; border-color: #fff"
+                >
+                  Get Started
+                </button></a
+              >
+            </div>
+            <div class="price-card anim-fade-up anim-delay-3">
+              <span class="ptag">Enterprise</span>
+              <div class="text-4xl md:text-5xl font-black mt-2">Custom</div>
+              <p class="text-zinc-500 text-sm">
+                For large organizations with complex processes, compliance
+                needs, and multi-channel marketing.
+              </p>
+              <ul class="space-y-3 text-sm mt-2 mb-6">
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Everything in Growth
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Unlimited tasks
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Dedicated marketing
+                  strategist
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> On-premise deployment option
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> SOC 2 & HIPAA compliance
+                </li>
+                <li class="flex gap-3">
+                  <span class="font-bold">✓</span> Custom SLA & contract
+                </li>
+              </ul>
+              <a href="contact.html">
+                <button class="btn-outline w-full mt-auto">
+                  Talk to Sales
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div
+          class="reveal-aperture p-6 md:p-16 w-full"
+          style="min-height: unset; padding-top: 6rem; padding-bottom: 6rem"
+        >
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+            <div class="anim-fade-left">
+              <span class="tag">FAQs</span>
+              <h2 class="text-4xl md:text-5xl font-black mt-6 leading-none">
+                Common<br />questions.
+              </h2>
+              <p class="text-zinc-500 mt-6">
+                Can't find your answer?
+                <a href="#contact" class="underline font-bold"
+                  >Chat with us →</a
+                >
+              </p>
+            </div>
+            <div class="anim-fade-right anim-delay-1">
+              <div class="faq-item">
+                <button class="faq-q text-base md:text-lg">
+                  Do I need to know how to code? <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-a">
+                  Not at all. Everything is set up through a visual interface,
+                  and our team handles all the technical and creative work. You
+                  describe what you want in plain English — we build it.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q text-base md:text-lg">
+                  How long does it take to set up?
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-a">
+                  Most clients have automations and campaigns live within 3–7
+                  days. Complex enterprise rollouts can take 2–4 weeks. We move
+                  fast because every day without automation — or marketing — is
+                  a day of lost opportunity for you.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q text-base md:text-lg">
+                  Is my business data safe? <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-a">
+                  Absolutely. We use bank-grade encryption, never retain your
+                  data beyond what's needed to run workflows and campaigns, and
+                  offer full on-premise deployment for enterprise clients. We're
+                  SOC 2 Type II certified.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q text-base md:text-lg">
+                  What if an automation makes a mistake?
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-a">
+                  All workflows include human-in-the-loop checkpoints where it
+                  matters. The system flags anomalies and pauses for approval
+                  before executing high-stakes actions. You stay in full
+                  control.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q text-base md:text-lg">
+                  Do you handle our social media and ads too?
+                  <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-a">
+                  Yes — on Growth and Enterprise plans we plan, create, and
+                  schedule your social content and manage your paid ad
+                  campaigns, all tied to the same dashboard as your automations
+                  so you see one clear picture of performance.
+                </div>
+              </div>
+              <div class="faq-item">
+                <button class="faq-q text-base md:text-lg">
+                  Can I cancel anytime? <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-a">
+                  Yes — no lock-in contracts on Starter and Growth plans. If
+                  you're not seeing value, we'll work with you to understand
+                  why. If you still want to leave, we'll process it without
+                  friction.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="growth-builder" class="bg-black text-white">
+        <div
+          class="reveal-aperture p-6 md:p-16 w-full"
+          style="min-height: 100vh; padding-top: 6rem; padding-bottom: 6rem"
+        >
+          <div class="anim-fade-up mb-16">
+            <span class="tag border-white/30 text-white/60"
+              >What We Build For You</span
+            >
+            <h2 class="text-4xl md:text-6xl font-black mt-6 leading-none">
+              Here's what your<br />business looks like<br />after we're done.
+            </h2>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mb-16">
+            <div
+              class="border border-white/10 p-6 md:p-10 anim-fade-left anim-delay-1"
+            >
+              <div class="mono text-red-400 text-xs tracking-widest mb-6">
+                BEFORE INSTYRNIS
+              </div>
+              <div class="space-y-4">
+                <div class="flex gap-4 items-start opacity-60">
+                  <span class="text-red-400 text-xl flex-shrink-0">✗</span>
+                  <p>
+                    Your team spends 3+ hours/day answering repetitive customer
+                    questions
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start opacity-60">
+                  <span class="text-red-400 text-xl flex-shrink-0">✗</span>
+                  <p>
+                    Leads come in but half don't get followed up within 24 hours
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start opacity-60">
+                  <span class="text-red-400 text-xl flex-shrink-0">✗</span>
+                  <p>
+                    Invoicing is done manually at month-end — errors happen,
+                    cash flow suffers
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start opacity-60">
+                  <span class="text-red-400 text-xl flex-shrink-0">✗</span>
+                  <p>
+                    Your social media and ads run with no real strategy — spend
+                    goes out with no clear return
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start opacity-60">
+                  <span class="text-red-400 text-xl flex-shrink-0">✗</span>
+                  <p>
+                    Scaling means hiring more people — costs rise as fast as
+                    revenue
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="border border-white/30 p-6 md:p-10 bg-white/5 anim-fade-right anim-delay-1"
+            >
+              <div class="mono text-green-400 text-xs tracking-widest mb-6">
+                AFTER INSTYRNIS
+              </div>
+              <div class="space-y-4">
+                <div class="flex gap-4 items-start">
+                  <span class="text-green-400 text-xl flex-shrink-0">✓</span>
+                  <p>
+                    AI handles 80% of support tickets — your team only deals
+                    with the complex stuff
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start">
+                  <span class="text-green-400 text-xl flex-shrink-0">✓</span>
+                  <p>
+                    Every lead gets an instant, personalised follow-up the
+                    moment they reach out
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start">
+                  <span class="text-green-400 text-xl flex-shrink-0">✓</span>
+                  <p>
+                    Invoices generate and send automatically — reconciled in
+                    real time
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start">
+                  <span class="text-green-400 text-xl flex-shrink-0">✓</span>
+                  <p>
+                    Every marketing dollar is tracked — you know exactly what's
+                    driving growth, in real time
+                  </p>
+                </div>
+                <div class="flex gap-4 items-start">
+                  <span class="text-green-400 text-xl flex-shrink-0">✓</span>
+                  <p>
+                    You 10× your output without adding headcount — profit margin
+                    expands
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="border border-white/20 p-6 md:p-12 anim-fade-up anim-delay-3"
+          >
+            <div class="mono text-white/30 text-xs tracking-widest mb-8">
+              GROWTH PROJECTION MODEL
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <div class="text-center">
+                <div class="text-5xl md:text-6xl font-black mb-2 text-white">
+                  DAY 7
+                </div>
+                <div class="text-green-400 font-bold text-lg mb-2">
+                  First Automation Live
+                </div>
+                <p class="text-zinc-400 text-sm">
+                  Your first workflow is running. Time saved starts immediately.
+                </p>
+              </div>
+              <div class="text-center md:border-x border-white/10 py-6 md:py-0">
+                <div class="text-5xl md:text-6xl font-black mb-2 text-white">
+                  DAY 30
+                </div>
+                <div class="text-green-400 font-bold text-lg mb-2">
+                  Full System Running
+                </div>
+                <p class="text-zinc-400 text-sm">
+                  Automations and campaigns are live. Your team is free to focus
+                  on growth.
+                </p>
+              </div>
+              <div class="text-center">
+                <div class="text-5xl md:text-6xl font-black mb-2 text-white">
+                  DAY 90
+                </div>
+                <div class="text-green-400 font-bold text-lg mb-2">
+                  340% ROI Reached
+                </div>
+                <p class="text-zinc-400 text-sm">
+                  Industry average. Most clients see payback well before this.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="mt-10 flex flex-col sm:flex-row gap-6 anim-fade-up anim-delay-4"
+          >
+            <a href="contact.html" class="w-full sm:w-auto"
+              ><button
+                class="btn-solid px-12 py-6 text-lg w-full"
+                style="background: #fff; color: #000; border-color: #fff"
+              >
+                BUILD MY GROWTH SYSTEM →
+              </button></a
+            >
+            <a href="services.html" class="w-full sm:w-auto"
+              ><button
+                class="btn-outline px-12 py-6 text-lg border-white/30 text-white hover:bg-white hover:text-black transition w-full"
+              >
+                VIEW ALL SERVICES
+              </button></a
+            >
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div
+          class="reveal-aperture flex flex-col items-center justify-center text-center w-full p-6 md:p-16 pt-24"
+        >
+          <span class="tag anim-fade-up mb-8">Start Today</span>
+          <h2
+            class="text-5xl md:text-7xl lg:text-[9vw] font-black leading-none mb-6 anim-fade-up anim-delay-1"
+          >
+            STOP DOING<br />IT MANUALLY.
+          </h2>
+          <p
+            class="text-lg md:text-xl text-zinc-500 max-w-xl mb-12 anim-fade-up anim-delay-2 leading-relaxed"
+          >
+            Book a free 30-minute strategy call. We'll show you exactly which
+            tasks can be automated and which marketing channels can be optimized
+            — and what it's worth to you in time and money.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row gap-6 anim-scale-in anim-delay-3 w-full sm:w-auto"
+          >
+            <a href="contact.html" class="w-full sm:w-auto"
+              ><button class="btn-solid text-xl px-14 py-7 w-full">
+                BOOK FREE CALL
+              </button></a
+            >
+            <a href="services.html" class="w-full sm:w-auto"
+              ><button class="btn-outline text-xl px-14 py-7 w-full">
+                SEE ALL SERVICES
+              </button></a
+            >
+          </div>
+          <div
+            class="mt-20 border-t border-black/10 pt-10 w-full flex flex-col md:flex-row justify-between items-center gap-6"
+          >
+            <div class="sync text-lg font-bold">INSTYRNIS</div>
+            <div
+              class="flex flex-wrap justify-center gap-6 md:gap-8 mono text-[10px] tracking-widest uppercase opacity-40"
+            >
+              <a href="about.html" class="hover:opacity-100 transition"
+                >About</a
+              >
+              <a href="services.html" class="hover:opacity-100 transition"
+                >Services</a
+              >
+              <a href="careers.html" class="hover:opacity-100 transition"
+                >Careers</a
+              >
+              <a href="contact.html" class="hover:opacity-100 transition"
+                >Contact</a
+              >
+            </div>
+            <p
+              class="mono text-[10px] opacity-20 uppercase tracking-[0.3em] md:tracking-[0.5em] text-center"
+            >
+              AI Automation & Digital Marketing · 2026
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+      /* ── PRELOADER ── */
+      const loadPhrases = [
+        "ANALYZING YOUR WORKFLOW...",
+        "IDENTIFYING BOTTLENECKS...",
+        "BUILDING AI AGENTS...",
+        "MAPPING YOUR MARKETING FUNNEL...",
+        "CONNECTING YOUR TOOLS...",
+        "SYSTEM READY.",
+      ];
+      let phraseIndex = 0;
+      function updateLoadMsg() {
+        const msgEl = document.getElementById("load-msg");
+        if (msgEl) msgEl.innerText = loadPhrases[phraseIndex];
+        phraseIndex = (phraseIndex + 1) % loadPhrases.length;
+      }
+      const msgInterval = setInterval(updateLoadMsg, 400);
+
+      window.onload = () => {
+        const tl = gsap.timeline();
+        tl.to(".loader-progress", {
+          width: "100%",
+          duration: 2.2,
+          ease: "power4.inOut",
+        })
+          .to("#loader", {
+            clipPath: "polygon(50% 50%, 50% 50%, 50% 50%, 50% 50%)",
+            duration: 1.4,
+            ease: "expo.inOut",
+          })
+          .set("#loader", { display: "none" })
+          .call(() => clearInterval(msgInterval));
+      };
+
+      /* ── CURSOR ── */
+      const cursor = document.getElementById("cursor");
+      window.addEventListener("mousemove", (e) => {
+        if (window.innerWidth > 768) {
+          gsap.to(cursor, {
+            x: e.clientX - 20,
+            y: e.clientY - 20,
+            duration: 0.1,
+          });
+        }
+      });
+
+      /* ── THREE.JS BACKGROUND ── */
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000,
+      );
+      const renderer = new THREE.WebGLRenderer({
+        canvas: document.getElementById("canvas-bg"),
+        alpha: true,
+        antialias: true,
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const group = new THREE.Group();
+      const icoMat = new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.06,
+      });
+      group.add(new THREE.Mesh(new THREE.IcosahedronGeometry(2, 4), icoMat));
+
+      const pGeo = new THREE.BufferGeometry();
+      const pPos = new Float32Array(2500 * 3);
+      for (let i = 0; i < 2500 * 3; i++) pPos[i] = (Math.random() - 0.5) * 20;
+      pGeo.setAttribute("position", new THREE.BufferAttribute(pPos, 3));
+      group.add(
+        new THREE.Points(
+          pGeo,
+          new THREE.PointsMaterial({ size: 0.012, color: 0x000000 }),
+        ),
+      );
+
+      scene.add(group);
+      camera.position.z = 5;
+      (function animBg() {
+        requestAnimationFrame(animBg);
+        group.rotation.y += 0.0007;
+        group.rotation.x += 0.0003;
+        renderer.render(scene, camera);
+      })();
+
+      /* ── SECTION REVEAL + PER-ELEMENT ANIMATIONS ── */
+      document.querySelectorAll("section").forEach((sec) => {
+        const aperture = sec.querySelector(".reveal-aperture");
+        if (!aperture) return;
+        ScrollTrigger.create({
+          trigger: sec,
+          start: "top 65%",
+          onEnter: () => {
+            aperture.classList.add("active");
+            sec.classList.add("section-visible");
+          },
+          onLeaveBack: () => {
+            aperture.classList.remove("active");
+            sec.classList.remove("section-visible");
+          },
+        });
+      });
+
+      /* Hero fires after loader */
+      setTimeout(() => {
+        const hero = document.getElementById("hero");
+        hero?.querySelector(".reveal-aperture")?.classList.add("active");
+        hero?.classList.add("section-visible");
+      }, 2600);
+
+      /* ── COUNTER ANIMATION ── */
+      function animCounter(el) {
+        const target = parseInt(el.dataset.target);
+        const start = performance.now();
+        const dur = 1800;
+        (function step(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - p, 4);
+          el.textContent = Math.floor(ease * target);
+          if (p < 1) requestAnimationFrame(step);
+          else el.textContent = target;
+        })(performance.now());
+      }
+
+      document.querySelectorAll(".counter-num[data-target]").forEach((el) => {
+        const io = new IntersectionObserver(
+          (entries) => {
+            if (entries[0].isIntersecting) {
+              animCounter(el);
+              io.disconnect();
+            }
+          },
+          { threshold: 0.5 },
+        );
+        io.observe(el);
+      });
+
+      /* ── FAQ TOGGLE ── */
+      document.querySelectorAll(".faq-q").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const item = btn.parentElement;
+          const wasOpen = item.classList.contains("open");
+          document
+            .querySelectorAll(".faq-item.open")
+            .forEach((i) => i.classList.remove("open"));
+          if (!wasOpen) item.classList.add("open");
+        });
+      });
+
+      /* ── SCROLL PROGRESS ── */
+      window.addEventListener("scroll", () => {
+        const scrolled = document.documentElement.scrollTop;
+        const total =
+          document.documentElement.scrollHeight -
+          document.documentElement.clientHeight;
+        const bar = document.getElementById("progress-bar");
+        if (bar && total > 0) bar.style.width = (scrolled / total) * 100 + "%";
+      });
+
+      /* ── RESIZE ── */
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+
+      (function () {
+        "use strict";
+
+        // Disable Right Click
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Copy
+        document.addEventListener("copy", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Cut
+        document.addEventListener("cut", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Paste
+        document.addEventListener("paste", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Drag
+        document.addEventListener("dragstart", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Select
+        document.addEventListener("selectstart", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Common Shortcuts
+        document.addEventListener("keydown", function (e) {
+          // F12
+          if (e.key === "F12") {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+I
+          if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "i")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+J
+          if (e.ctrlKey && e.shiftKey && (e.key === "J" || e.key === "j")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+C
+          if (e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+U
+          if (e.ctrlKey && (e.key === "U" || e.key === "u")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+S
+          if (e.ctrlKey && (e.key === "S" || e.key === "s")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+A
+          if (e.ctrlKey && (e.key === "A" || e.key === "a")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+C
+          if (e.ctrlKey && (e.key === "C" || e.key === "c")) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // Clear Console
+        setInterval(function () {
+          console.clear();
+        }, 1000);
+
+        // Prevent iframe embedding
+        if (window.top !== window.self) {
+          window.top.location = window.self.location;
+        }
+
+        // Anti Debugger
+        setInterval(function () {
+          debugger;
+        }, 200);
+      })();
+    </script>
+  </body>
+</html>

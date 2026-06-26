@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Careers | INSTYRNIS</title>
+    <link rel="shortcut icon" href="./R1.png" type="image/x-icon" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Plus+Jakarta+Sans:wght@200;400;800&family=Space+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: #fff;
+        color: #000;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      .mono {
+        font-family: "Space Mono", monospace;
+      }
+      .sync {
+        font-family: "Syncopate", sans-serif;
+      }
+      .tag {
+        border: 1px solid #000;
+        padding: 4px 14px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        width: fit-content;
+        letter-spacing: 0.1em;
+      }
+      .btn-solid {
+        background: #000;
+        color: #fff;
+        padding: 0.9rem 2.2rem;
+        font-weight: 800;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border: 2px solid #000;
+        transition: all 0.3s;
+        display: inline-block;
+      }
+      .btn-solid:hover {
+        background: #fff;
+        color: #000;
+      }
+      .fade {
+        opacity: 0;
+        transform: translateY(40px);
+        transition:
+          opacity 0.8s var(--ease),
+          transform 0.8s var(--ease);
+      }
+      .fade.in {
+        opacity: 1;
+        transform: none;
+      }
+      .fd2 {
+        transition-delay: 0.15s !important;
+      }
+      .fd3 {
+        transition-delay: 0.3s !important;
+      }
+      .fd4 {
+        transition-delay: 0.45s !important;
+      }
+
+      /* New Grid Card Design with Brutalist Slide-Up Hover Effect */
+      .career-card {
+        border: 2px solid #000;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        top: 0;
+        transition: all 0.4s var(--ease);
+      }
+      @media (min-width: 1024px) {
+        .career-card:hover {
+          top: -8px;
+          box-shadow: 0 12px 0 #000;
+        }
+      }
+      .pill {
+        background: #000;
+        color: #fff;
+        padding: 3px 12px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        margin: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="fixed top-0 w-full z-[100] px-6 py-4 md:px-12 md:py-6 flex justify-between items-center bg-[rgba(255,255,255,0.92)] backdrop-blur-md border-b border-black"
+    >
+      <a href="index.html" class="sync text-xl font-bold tracking-tighter"
+        >INSTYRNIS</a
+      >
+
+      <div
+        class="hidden md:flex mono gap-8 text-[10px] tracking-widest uppercase"
+      >
+        <a href="index.html" class="hover:line-through transition">Home</a>
+        <a href="about.html" class="hover:line-through transition">About</a>
+        <a href="services.html" class="hover:line-through transition"
+          >Services</a
+        >
+        <a href="careers.html" class="hover:line-through transition underline"
+          >Careers</a
+        >
+        <a href="contact.html" class="hover:line-through transition">Contact</a>
+      </div>
+
+      <button
+        id="menu-btn"
+        class="block md:hidden mono text-[11px] font-bold tracking-widest uppercase border border-black px-3 py-1.5 active:bg-gray-100"
+      >
+        MENU
+      </button>
+    </nav>
+
+    <div
+      id="mobile-menu"
+      class="hidden fixed top-[58px] left-0 w-full bg-white border-b border-black z-50 flex-col p-6 gap-4 mono text-xs tracking-widest uppercase transition-all duration-300"
+    >
+      <a href="index.html" class="py-2 border-b border-gray-100">Home</a>
+      <a href="about.html" class="py-2 border-b border-gray-100">About</a>
+      <a href="services.html" class="py-2 border-b border-gray-100">Services</a>
+      <a href="careers.html" class="py-2 border-b border-gray-100 font-bold"
+        >Careers</a
+      >
+      <a href="contact.html" class="py-2">Contact</a>
+    </div>
+
+    <div
+      class="pt-32 pb-12 px-6 md:pt-40 md:pb-20 md:px-16 border-b-[8px] border-black"
+    >
+      <span class="tag inline-block fade">Join the System</span>
+      <h1
+        class="fade fd2 sync"
+        style="
+          font-size: clamp(2.5rem, 8.5vw, 8.5rem);
+          font-weight: 800;
+          line-height: 0.85;
+          letter-spacing: -0.05em;
+          margin-top: 1.5rem;
+        "
+      >
+        BUILD THE<br />AUTOMATING.
+      </h1>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-12">
+        <p class="fade fd3 text-lg md:text-xl text-gray-600 leading-relaxed">
+          We don't manage chaos; we engineer it out of existence. INSTYRNIS is
+          seeking hyper-focused specialists who think in algorithms and hate
+          repetitive work. Here, your goal is to build solutions that render old
+          inefficiencies obsolete.
+        </p>
+        <div
+          class="fade fd4 border-t-4 pt-6 lg:border-t-0 lg:pt-0 lg:border-l-4 lg:border-black lg:pl-8"
+        >
+          <p class="font-extrabold text-lg mb-3">Work Protocol:</p>
+          <p class="text-gray-600 text-sm md:text-base leading-relaxed">
+            100% Async Framework → Complete Autonomy → Meritocratic Scale. Work
+            from anywhere on earth, provided your logic is clean and your
+            pipelines don't break.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-6 md:px-16 py-12 md:py-20 bg-gray-50/50">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
+        <div class="career-card fade p-8 md:p-10">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <span class="tag">01 / Engineering</span>
+              <div
+                class="mono text-[11px] text-gray-400 font-bold tracking-wider"
+              >
+                FULL-TIME
+              </div>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-4">
+              Lead AI Systems Architect
+            </h2>
+            <p
+              class="text-gray-600 dynamic text-sm md:text-base leading-relaxed mb-6"
+            >
+              Responsible for structuring robust multi-agent frameworks and
+              fine-tuning enterprise LLM pipelines. You must be comfortable
+              working with deep API graph mappings, complex system handoffs, and
+              deterministic fallback designs.
+            </p>
+            <div class="mb-8">
+              <span class="pill">LangChain</span><span class="pill">Python</span
+              ><span class="pill">Vector DBs</span
+              ><span class="pill">Node.js</span>
+            </div>
+          </div>
+          <div>
+            <div
+              class="border-t border-gray-200 pt-6 mt-4 flex items-center justify-between"
+            >
+              <div>
+                <div class="mono text-[9px] opacity-40">COMPENSATION RANGE</div>
+                <div class="text-lg font-extrabold">$40k – $50k/yr</div>
+              </div>
+              <a href="contact.html"
+                ><button class="btn-solid text-xs py-2.5 px-6">
+                  Apply Now
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="career-card fade fd2 p-8 md:p-10">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <span class="tag">02 / Operations</span>
+              <div
+                class="mono text-[11px] text-gray-400 font-bold tracking-wider"
+              >
+                FULL-TIME
+              </div>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-4">
+              Automation Logic Engineer
+            </h2>
+            <p
+              class="text-gray-600 dynamic text-sm md:text-base leading-relaxed mb-6"
+            >
+              You will own the optimization layer of our client stacks. If you
+              know how to push webhooks, parse messy payloads, and bind
+              enterprise tools (CRMs, ERPs, Accounting software) smoothly into
+              absolute sync, you're who we need.
+            </p>
+            <div class="mb-8">
+              <span class="pill">Make.com</span><span class="pill">Zapier</span
+              ><span class="pill">REST APIs</span
+              ><span class="pill">GraphQL</span>
+            </div>
+          </div>
+          <div>
+            <div
+              class="border-t border-gray-200 pt-6 mt-4 flex items-center justify-between"
+            >
+              <div>
+                <div class="mono text-[9px] opacity-40">COMPENSATION RANGE</div>
+                <div class="text-lg font-extrabold">Project based</div>
+              </div>
+              <a href="contact.html"
+                ><button class="btn-solid text-xs py-2.5 px-6">
+                  Apply Now
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="career-card fade fd3 p-8 md:p-10">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <span class="tag">03 / Product</span>
+              <div
+                class="mono text-[11px] text-gray-400 font-bold tracking-wider"
+              >
+                CONTRACT / REMOTE
+              </div>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-4">
+              Brutalist UI/UX Designer
+            </h2>
+            <p
+              class="text-gray-600 dynamic text-sm md:text-base leading-relaxed mb-6"
+            >
+              We build high-end tools that look striking and clean. Looking for
+              a visual minimalist specialized in extreme layout clarity,
+              hyper-scannable interface hierarchies, native Tailwind CSS
+              styling, and frictionless typography structures.
+            </p>
+            <div class="mb-8">
+              <span class="pill">Figma</span><span class="pill">Tailwind</span
+              ><span class="pill">Brutalism</span
+              ><span class="pill">Interaction Design</span>
+            </div>
+          </div>
+          <div>
+            <div
+              class="border-t border-gray-200 pt-6 mt-4 flex items-center justify-between"
+            >
+              <div>
+                <div class="mono text-[9px] opacity-40">COMPENSATION RANGE</div>
+                <div class="text-lg font-extrabold">$20k – $35k/yr</div>
+              </div>
+              <a href="contact.html"
+                ><button class="btn-solid text-xs py-2.5 px-6">
+                  Apply Now
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="career-card fade fd4 p-8 md:p-10">
+          <div>
+            <div class="flex justify-between items-start mb-6">
+              <span class="tag">04 / Growth</span>
+              <div
+                class="mono text-[11px] text-gray-400 font-bold tracking-wider"
+              >
+                FULL-TIME
+              </div>
+            </div>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-4">
+              Technical Client Partner
+            </h2>
+            <p
+              class="text-gray-600 dynamic text-sm md:text-base leading-relaxed mb-6"
+            >
+              The bridge between complex workflows and operational metrics. You
+              will dive deep into client org charts, diagnose structural bloat,
+              scope clear automation boundaries, and translate code
+              infrastructure possibilities to C-Suite stakeholders.
+            </p>
+            <div class="mb-8">
+              <span class="pill">Workflow Auditing</span
+              ><span class="pill">Scope Drafting</span
+              ><span class="pill">Strategy</span>
+            </div>
+          </div>
+          <div>
+            <div
+              class="border-t border-gray-200 pt-6 mt-4 flex items-center justify-between"
+            >
+              <div>
+                <div class="mono text-[9px] opacity-40">COMPENSATION RANGE</div>
+                <div class="text-lg font-extrabold">Project based</div>
+              </div>
+              <a href="contact.html"
+                ><button class="btn-solid text-xs py-2.5 px-6">
+                  Apply Now
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="py-16 px-6 md:py-24 md:px-16 bg-black text-white text-center">
+      <h2
+        class="fade sync"
+        style="
+          font-size: clamp(2rem, 4.5vw, 4.5rem);
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          line-height: 0.9;
+        "
+      >
+        DON'T FIT THE<br />ROLES LISTED?
+      </h2>
+      <p
+        class="fade fd2 text-gray-400 my-6 mx-auto text-base md:text-lg max-w-[500px] leading-relaxed"
+      >
+        If you build autonomous apps, custom scrapers, or alternative systems in
+        your spare time, send us your repo link anyway. We create positions for
+        outlier talent.
+      </p>
+      <div class="fade fd3 mt-8">
+        <a href="contact.html">
+          <button
+            class="btn-solid bg-white text-black border-white text-base py-4 px-10"
+          >
+            OPEN APPLICATION →
+          </button>
+        </a>
+      </div>
+      <div
+        class="mt-16 border-t border-zinc-800 pt-8 mono text-[10px] opacity-20 uppercase tracking-[1em]"
+      >
+        INSTYRNIS · 2026
+      </div>
+    </div>
+
+    <script>
+      // Reveal Animations (Intersection Observer)
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("in");
+          });
+        },
+        { threshold: 0.05 },
+      );
+      document.querySelectorAll(".fade").forEach((el) => obs.observe(el));
+
+      // Responsive Mobile Menu Toggle
+      const menuBtn = document.getElementById("menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      menuBtn.addEventListener("click", () => {
+        if (mobileMenu.classList.contains("hidden")) {
+          mobileMenu.classList.remove("hidden");
+          mobileMenu.classList.add("flex");
+          menuBtn.innerText = "CLOSE";
+        } else {
+          mobileMenu.classList.remove("flex");
+          mobileMenu.classList.add("hidden");
+          menuBtn.innerText = "MENU";
+        }
+      });
+
+      (function () {
+        "use strict";
+
+        // Disable Right Click
+        document.addEventListener("contextmenu", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Copy
+        document.addEventListener("copy", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Cut
+        document.addEventListener("cut", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Paste
+        document.addEventListener("paste", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Drag
+        document.addEventListener("dragstart", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Select
+        document.addEventListener("selectstart", function (e) {
+          e.preventDefault();
+        });
+
+        // Disable Common Shortcuts
+        document.addEventListener("keydown", function (e) {
+          // F12
+          if (e.key === "F12") {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+I
+          if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "i")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+J
+          if (e.ctrlKey && e.shiftKey && (e.key === "J" || e.key === "j")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+Shift+C
+          if (e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+U
+          if (e.ctrlKey && (e.key === "U" || e.key === "u")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+S
+          if (e.ctrlKey && (e.key === "S" || e.key === "s")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+A
+          if (e.ctrlKey && (e.key === "A" || e.key === "a")) {
+            e.preventDefault();
+            return false;
+          }
+
+          // Ctrl+C
+          if (e.ctrlKey && (e.key === "C" || e.key === "c")) {
+            e.preventDefault();
+            return false;
+          }
+        });
+
+        // Clear Console
+        setInterval(function () {
+          console.clear();
+        }, 1000);
+
+        // Prevent iframe embedding
+        if (window.top !== window.self) {
+          window.top.location = window.self.location;
+        }
+
+        // Anti Debugger
+        setInterval(function () {
+          debugger;
+        }, 200);
+      })();
+    </script>
+  </body>
+</html>
